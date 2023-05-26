@@ -3,6 +3,7 @@ version: '3'
 services:
   mariadb:
     build: requirements/mariadb 	# ou se trouve son Dockerfile
+    image: mariadb_42
     container_name: mariadb			# Le nom du container, oui vraiment.
     env_file: .env                  # le fichier d'environnement pour transmettre les variables
     volumes:                        # Voir plus bas
@@ -11,11 +12,9 @@ services:
     networks:
      - inception            			# à quel network il appartient 
     dockerfile: Dockerfile			# le nom du Dockerfile
-    expose:                         # le port à exposer
-      - "3306"
-
   nginx:
     build: requirements/nginx
+    image: nginx_42
     depends_on:        			 # Nouvelle ligne, indiquant de ne pas démarrer NGINX tant que WordPress n'a pas démarré.
       - wordpress 
     container_name: nginx
@@ -27,8 +26,7 @@ services:
     dockerfile: Dockerfile
     ports:
       - "443:443" 		# on indique le port qui sera exposé a la machine locale
-    restart: on-failure 		# Ici nous changeons, le container redémarrera uniquement en cas de crash.
-
+    restart: always
   wordpress:
     container_name: wordpress
     env_file: .env
@@ -37,27 +35,28 @@ services:
     networks:
      - inception 
     build: requirements/wordpress
+    image: wordpress_42
     dockerfile: Dockerfile
     depends_on:    					# WordPress démarrera uniquement après MariaDB (sinon il ne pourra pas configurer la base de données...)
       - mariadb
-    restart: on-failure
-    expose: 
-     - "9000"
+    restart: always
 
 volumes:
   wordpress:
+    name: wordpress
     driver: local # ici nous stockons le volume en local
     driver_opts:
       type: none 									# aucun type spécifique
       o: 'bind'
-      device: /Users/ale-cont/data/wordpress 		#Ou stocker le dossier sur votre ordinateur en local
+      device: /Users/ale-cont/Desktop/Inception/srcs/wordpress 		#Ou stocker le dossier sur votre ordinateur en local
   mariadb:
+    name: mariadb
     driver: local
     driver_opts:
       type: none
       o: bind										 # Les Bind Mounts sont des volumes qui se montent sur un chemin d'accès à l'hôte, et ils peuvent être modifiés par d'autres processus en dehors de docker.
-      device: /Users/ale-cont/data/mariadb			#Ou stocker le dossier sur votre ordinateur en local
+      device: /Users/ale-cont/Desktop/Inception/srcs/mariadb			#Ou stocker le dossier sur votre ordinateur en local
 
 networks:
   inception:
-    driver: bridge
+    name: inception
