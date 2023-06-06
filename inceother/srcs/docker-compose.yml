@@ -1,8 +1,8 @@
-version: "3.5"
+version: "3"
 
 networks:
-  app-network:
-    name: app-network
+  inception_net:
+    name: inception_net
     driver: bridge
 
 volumes:
@@ -24,18 +24,18 @@ volumes:
 services:
   mariadb:
     container_name: mariadb
-    build: ./requirements/mariadb
+    build: requirements/mariadb
     env_file:
       - .env
     volumes:
       - db:/var/lib/mysql
     networks:
-      - app-network
-    restart: unless-stopped
+      - inception_net
+    restart: always
 
   wordpress:
     container_name: wordpress
-    build: ./requirements/wordpress
+    build: requirements/wordpress
     env_file:
       - .env
     depends_on:
@@ -43,12 +43,12 @@ services:
     volumes:
       - wp:/var/www/html
     networks:
-      - app-network
-    restart: unless-stopped
+      - inception_net
+    restart: always
 
   nginx:
     container_name: nginx
-    build: ./requirements/nginx
+    build: requirements/nginx
     ports:
       - "443:443"
     depends_on:
@@ -56,5 +56,5 @@ services:
     volumes:
       - wp:/var/www/html
     networks:
-      - app-network
-    restart: unless-stopped
+      - inception_net
+    restart: always
