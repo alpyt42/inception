@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ale-cont <ale-cont@student.42.fr>          +#+  +:+       +#+         #
+#    By: alric <alric@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 18:44:33 by alric             #+#    #+#              #
-#    Updated: 2023/06/09 11:36:52 by ale-cont         ###   ########.fr        #
+#    Updated: 2023/06/29 17:08:20 by alric            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ clean:
 	@docker stop nginx wordpress mariadb 2>/dev/null || true
 	@docker rm nginx wordpress mariadb 2>/dev/null || true
 	@docker volume rm db wp 2>/dev/null || true
-	@docker rmi srcs-nginx srcs-wordpress srcs-mariadb 2>/dev/null || true
+	@docker rmi srcs_nginx srcs_wordpress srcs_mariadb 2>/dev/null || true
 	@docker network rm inception_net 2>/dev/null || true
 
 re: clean all
