@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alric <alric@student.42.fr>                +#+  +:+       +#+         #
+#    By: ale-cont <ale-cont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 18:44:33 by alric             #+#    #+#              #
-#    Updated: 2023/06/29 19:42:16 by alric            ###   ########.fr        #
+#    Updated: 2023/06/30 02:48:11 by ale-cont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 all: up
 
-up: clean
+up:
 	@docker compose -f ./srcs/docker-compose.yml up --detach
 
 down:
