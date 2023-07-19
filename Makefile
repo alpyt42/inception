@@ -13,6 +13,9 @@
 all: up
 
 up:
+	@mkdir -p ${HOME}/data
+	@mkdir -p ${HOME}/data/wordpress
+	@mkdir -p ${HOME}/data/mariadb
 	@docker compose -f ./srcs/docker-compose.yml up --detach
 
 down:
@@ -30,6 +33,7 @@ clean:
 	@docker volume rm db wp 2>/dev/null || true
 	@docker rmi srcs-nginx srcs-wordpress srcs-mariadb 2>/dev/null || true
 	@docker network rm inception_net 2>/dev/null || true
+	sudo rm -rf ${HOME}/data
 
 re: clean all
 

@@ -220,3 +220,7 @@ Cette ligne modifie le fichier de configuration /etc/php/7.3/fpm/pool.d/www.conf
 
 Cette ligne exécute les arguments en ligne de commande passés au script. Cela permet d'exécuter les commandes spécifiées lors du démarrage du conteneur, après avoir appelé ce script. Cette étape est importante pour lancer le serveur PHP-FPM et démarrer WordPress.
 En résumé, le script wordpress_start.sh vérifie si WordPress est déjà installé. S'il ne l'est pas, il télécharge et extrait la dernière version de WordPress, met à jour le fichier de configuration wp-config.php avec les valeurs des variables d'environnement appropriées, et modifie la configuration de PHP-FPM pour utiliser le port 9000. Ensuite, il exécute les commandes passées en ligne de commande pour démarrer WordPress.
+
+
+https://github.com/alexnik42/inception/
+https://github.com/Florian-A/Inception

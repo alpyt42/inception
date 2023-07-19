@@ -12,19 +12,19 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/alric/data/wordpress
+      device: ${HOME}/data/wordpress
   db:
     driver: local
     name: db
     driver_opts:
       type: none
       o: bind
-      device: /home/alric/data/mariadb
+      device: ${HOME}/data/mariadb
 
 services:
   mariadb:
     container_name: mariadb
-    build: requirements/mariadb
+    build: ./requirements/mariadb
     env_file:
       - .env
     volumes:
@@ -35,7 +35,22 @@ services:
 
   wordpress:
     container_name: wordpress
-    build: requirements/wordpress
+    build:
+      context: ./requirements/wordpress
+      args:
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
+      - DB_HOST
+      - WP_URL
+      - WP_TITLE
+      - WP_SUPERADMIN_USER
+      - WP_SUPERADMIN_EMAIL
+      - WP_SUPERADMIN_PASSWORD
+      - WP_ADMIN_USER
+      - WP_ADMIN_EMAIL
+      - WP_ADMIN_PASSWORD
+      - REDIS_PASSWORD
     env_file:
       - .env
     depends_on:
@@ -48,7 +63,7 @@ services:
 
   nginx:
     container_name: nginx
-    build: requirements/nginx
+    build: ./requirements/nginx
     ports:
       - "443:443"
     depends_on:

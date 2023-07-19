@@ -1,15 +1,49 @@
 FROM debian:buster
 
-COPY ./tools/wordpress_start.sh /bin
+# Define environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ARG DB_NAME=;
+ARG DB_USER=;
+ARG DB_PASSWORD=;
+ARG DB_HOST=;
+ARG WP_URL=;
+ARG WP_TITLE=;
+ARG WP_SUPERADMIN_USER=;
+ARG WP_SUPERADMIN_EMAIL=;
+ARG WP_SUPERADMIN_PASSWORD=;
+ARG WP_ADMIN_USER=;
+ARG WP_ADMIN_EMAIL=;
+ARG WP_ADMIN_PASSWORD=;
+ARG REDIS_PASSWORD=;
 
-RUN apt update -y && \
-	apt install -y php php-fpm php-mysql curl && \
-	mkdir /run/php && mkdir -p /var/www/html && chmod +x /bin/wordpress_start.sh
+RUN apt-get -yqq update;
 
-WORKDIR /var/www/html/
+# Install php-fpm
+RUN apt-get -yqq install -y php-fpm php-mysql default-mysql-client php-pear php-dev curl;
 
-EXPOSE 9000
+# Modify config for listen port 9000
+RUN sed -E -i 's/^(\s*listen\s*=\s*).+$/\1php_wordpress:9000/g' /etc/php/7.3/fpm/pool.d/www.conf;
 
-ENTRYPOINT ["wordpress_start.sh"]
+RUN mkdir -p /run/php/;
 
-CMD ["php-fpm7.3", "-F"]
+# Install imagemagick extension
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends \
+    && pecl install imagick;
+
+RUN echo "extension=imagick.so" >> /etc/php/7.3/cli/php.ini;
+
+# Install wp-cli
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
+RUN chmod +x wp-cli.phar;
+RUN mv wp-cli.phar /usr/local/bin/wp-cli.phar;
+RUN wp-cli.phar core download --allow-root --path=/tmp/wordpress;
+
+RUN mkdir -p /var/www/localhost;
+RUN chown -R www-data:www-data /var/www/localhost;
+RUN chmod -R 755 /var/www/localhost;
+
+# Copy entrypoint
+COPY ./script/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh"]
