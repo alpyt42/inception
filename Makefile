@@ -16,6 +16,7 @@ up:
 	@mkdir -p ${HOME}/data
 	@mkdir -p ${HOME}/data/wordpress
 	@mkdir -p ${HOME}/data/mariadb
+	@sudo sh -c 'echo "127.0.0.1 ale-cont.42.fr" >> /etc/hosts && echo "successfully added ale-cont.42.fr to /etc/hosts"'
 	@docker compose -f ./srcs/docker-compose.yml up --detach
 
 down:
@@ -34,6 +35,8 @@ clean:
 	@docker rmi srcs-nginx srcs-wordpress srcs-mariadb 2>/dev/null || true
 	@docker network rm inception_net 2>/dev/null || true
 	sudo rm -rf ${HOME}/data
+	@sudo sed -i '/127.0.0.1 ale-cont.42.fr/d' /etc/hosts && echo "successfully removed ale-cont.42.fr to /etc/hosts"
+	# @docker system prune --all # remove comment will remove every cached data 
 
 re: clean all
 

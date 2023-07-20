@@ -35,22 +35,7 @@ services:
 
   wordpress:
     container_name: wordpress
-    build:
-      context: ./requirements/wordpress
-      args:
-      - DB_NAME
-      - DB_USER
-      - DB_PASSWORD
-      - DB_HOST
-      - WP_URL
-      - WP_TITLE
-      - WP_SUPERADMIN_USER
-      - WP_SUPERADMIN_EMAIL
-      - WP_SUPERADMIN_PASSWORD
-      - WP_ADMIN_USER
-      - WP_ADMIN_EMAIL
-      - WP_ADMIN_PASSWORD
-      - REDIS_PASSWORD
+    build: ./requirements/wordpress
     env_file:
       - .env
     depends_on:
