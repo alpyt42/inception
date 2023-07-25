@@ -1,20 +1,12 @@
 FROM debian:buster
 
-RUN apt-get update && apt-get install -y mariadb-server
+COPY ./tools/launch_mdb.sh .
 
-# Expose the default MariaDB port
+RUN apt-get update 
+RUN apt-get install -y mariadb-server 
+RUN chmod +x launch_mdb.sh
+
 EXPOSE 3306
 
-# Copy the configuration file
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-
-# Copy the SQL file for initial database setup
-COPY ./tools/initial_db.sql /docker-entrypoint-initdb.d/
-
-# Start the MariaDB service and listen on all network interfaces
+ENTRYPOINT ["./launch_mdb.sh"]
 CMD ["mysqld", "--bind-address=0.0.0.0"]
-
-# Execute the SQL file during container initialization
-RUN service mysql start \
-	&& mysql < /docker-entrypoint-initdb.d/initial_db.sql \
-	&& rm -f /docker-entrypoint-initdb.d/initial_db.sql

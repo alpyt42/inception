@@ -6,7 +6,7 @@
 #    By: ale-cont <ale-cont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 18:44:33 by alric             #+#    #+#              #
-#    Updated: 2023/06/30 02:48:11 by ale-cont         ###   ########.fr        #
+#    Updated: 2023/07/25 09:53:15 by ale-cont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ clean:
 	@docker network rm inception_net 2>/dev/null || true
 	sudo rm -rf ${HOME}/data
 	@sudo sed -i '/127.0.0.1 ale-cont.42.fr/d' /etc/hosts && echo "successfully removed ale-cont.42.fr to /etc/hosts"
-	# @docker system prune --all # remove comment will remove every cached data 
+	# @docker system prune --all # remove comment will remove every cached docker data 
 
 re: clean all
 
